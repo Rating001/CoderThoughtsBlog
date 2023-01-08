@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CoderThoughtsBlog.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,6 +25,9 @@ namespace CoderThoughtsBlog.Models
         [StringLength(1000, ErrorMessage = "The {0} must be between {2} and {1} characters long", MinimumLength = 2)]
         [Display(Name = "Moderated Comment")]
         public string ModeratedBody { get; set; }
+
+        public ModerationType ModerationType { get; set; }
+
 
         //Navigation properties
         public virtual Post Post { get; set; }
