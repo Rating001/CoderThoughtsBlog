@@ -16,10 +16,10 @@ namespace CoderThoughtsBlog.Models
         [StringLength(500, ErrorMessage = "Your blog {0} must be between {2} and {1} characters in length.", MinimumLength = 2)]
         public string Description { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 

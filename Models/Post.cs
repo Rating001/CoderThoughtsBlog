@@ -14,7 +14,7 @@ namespace CoderThoughtsBlog.Models
         public string AuthorId { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
+        [StringLength(75, ErrorMessage = "The {0} must be between {2} and {1} characters long.", MinimumLength = 2)]
         public string Title { get; set; }
 
         [Required]
@@ -23,12 +23,14 @@ namespace CoderThoughtsBlog.Models
         [Required]
         public string Content { get; set; }
         
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
+
+        public bool IsReady { get; set; }
 
         public string Slug { get; set; }
         
