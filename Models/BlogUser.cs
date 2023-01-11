@@ -44,5 +44,6 @@ namespace CoderThoughtsBlog.Models
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
 
 
+
     }
 }
