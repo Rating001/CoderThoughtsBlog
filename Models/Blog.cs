@@ -19,10 +19,10 @@ namespace CoderThoughtsBlog.Models
         public string Description { get; set; }
 
         [DataType(DataType.DateTime)]
-        [Display(Name = "Created Date")]
+        [Display(Name = "Date Created")]
         public DateTime Created { get; set; }
         [DataType(DataType.DateTime)]
-        [Display(Name = "Updated Date")]
+        [Display(Name = "Date Updated")]
         public DateTime? Updated { get; set; }
 
         [Display(Name = "Blog Image")]

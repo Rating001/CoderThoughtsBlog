@@ -13,7 +13,6 @@ namespace CoderThoughtsBlog.Controllers
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly BlogUser _blogUser;
 
         public BlogsController(ApplicationDbContext context)
         {
@@ -50,7 +49,6 @@ namespace CoderThoughtsBlog.Controllers
         // GET: Blogs/Create
         public IActionResult Create()
         {
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -59,7 +57,7 @@ namespace CoderThoughtsBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogUserId,Name,Description,Created,Updated,ImageData,ContentType")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Name,Description,Image")] Blog blog)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +65,6 @@ namespace CoderThoughtsBlog.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", blog.BlogUserId);
             return View(blog);
         }
 
