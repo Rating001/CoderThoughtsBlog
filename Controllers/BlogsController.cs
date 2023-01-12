@@ -13,10 +13,12 @@ namespace CoderThoughtsBlog.Controllers
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BlogUser _blogUser;
 
         public BlogsController(ApplicationDbContext context)
         {
             _context = context;
+;
         }
 
         // GET: Blogs
