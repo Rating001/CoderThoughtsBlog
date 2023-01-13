@@ -34,6 +34,7 @@ namespace CoderThoughtsBlog.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
+        [Display(Name = "Status")]
         public ReadyStatus ReadyStatus { get; set; }
 
         //public bool IsReady { get; set; }
