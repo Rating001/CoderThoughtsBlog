@@ -26,6 +26,23 @@ namespace CoderThoughtsBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> OriginalIndex()
+        {
+            var originalComments = await _context.Comments.ToListAsync();
+            return View("Index", originalComments);
+        }
+        public async Task<IActionResult> ModeratedIndex()
+        {
+            var moderatedComments = await _context.Comments.Where(c => c.Moderated != null)
+                .ToListAsync();
+            return View("Index", moderatedComments);
+        }
+
+        //public async Task<IActionResult> DeletedIndex()
+        //{
+
+        //}
+
         // GET: Comments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
