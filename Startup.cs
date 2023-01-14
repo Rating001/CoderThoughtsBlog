@@ -1,11 +1,15 @@
 using CoderThoughtsBlog.Data;
 using CoderThoughtsBlog.Models;
+using CoderThoughtsBlog.Services;
+using CoderThoughtsBlog.Services.Interfaces;
+using CoderThoughtsBlog.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,13 +36,8 @@ namespace CoderThoughtsBlog
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-
-
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddRazorPages();
+
 
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -48,6 +47,14 @@ namespace CoderThoughtsBlog
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            //Register the custom DataService Class
+            services.AddScoped<DataService>();
+
+            //Register a Pre-Configured instance of the MailSettings class
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IBlogEmailSender, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
