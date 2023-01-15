@@ -1,4 +1,7 @@
-﻿@model CoderThoughtsBlog.Models.Post
+﻿@using CoderThoughtsBlog.Services.Interfaces;
+@model CoderThoughtsBlog.Models.Post
+@inject IImageService imageService
+
 
 @{
     ViewData["Title"] = "Details";
@@ -10,10 +13,14 @@
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 @Html.Raw(Model.Content)
+                <img class="img-fluid" src="@imageService.DecodeImage(Model.ImageData!,Model.ContentType!)" class="square-img rounded-start" height="200" alt="...">
             </div>
         </div>
     </div>
 </article>
+
+<!--Display Comments related to this post-->
+<!--Display the image of the author-->
 
 <form asp-controller="Comments" asp-action="Create">
     
@@ -30,3 +37,21 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+@section Scripts {
+            <script>
+                $('#summernote').summernote({
+                    placeholder: 'Leave the author a comment!',
+                    tabsize: 2,
+                    height: 120,
+                    toolbar: [
+                      ['style', ['style']],
+                      ['font', ['bold', 'underline', 'clear']],
+                      ['color', ['color']],
+                      ['para', ['ul', 'ol', 'paragraph']],
+                      ['table', ['table']],
+                      ['insert', ['link', 'picture', 'video']],
+                      ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
+                  });
+            </script>
+}

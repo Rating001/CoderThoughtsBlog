@@ -10,6 +10,7 @@ using CoderThoughtsBlog.Models;
 using CoderThoughtsBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -70,7 +71,7 @@ namespace CoderThoughtsBlog.Controllers
             if (ModelState.IsValid)
             {
                 blog.Created = DateTime.Now;
-                //Get the user's Id
+                //Set the current user to the BlogUserId (Security and necessity)
                 blog.BlogUserId = _userManager.GetUserId(User);
 
                 //Convert the image into a byte array.
@@ -86,6 +87,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Blogs/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,9 +106,10 @@ namespace CoderThoughtsBlog.Controllers
         // POST: Blogs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Blog blog, IFormFile newImage)
         {
             if (id != blog.Id)
             {
@@ -117,7 +120,27 @@ namespace CoderThoughtsBlog.Controllers
             {
                 try
                 {
-                    _context.Update(blog);
+                    var editBlog = await _context.Blogs.FindAsync(blog.Id);
+                    editBlog.Updated = DateTime.Now;
+                    if(editBlog.Name != blog.Name)
+                    {
+                        editBlog.Name = blog.Name;
+                    }
+                    if(editBlog.Description != blog.Description)
+                    {
+                        editBlog.Description = blog.Description;
+                    }
+                    if(newImage is not null)
+                    {
+                        editBlog.ImageData = await _imageService.EncodeImageAsync(newImage);
+                        editBlog.ContentType= newImage.ContentType;
+                    }
+
+
+
+
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -137,6 +160,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Blogs/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

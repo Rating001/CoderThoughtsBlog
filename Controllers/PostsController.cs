@@ -10,6 +10,10 @@ using CoderThoughtsBlog.Models;
 using CoderThoughtsBlog.Services;
 using CoderThoughtsBlog.Services.Interfaces;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -17,11 +21,16 @@ namespace CoderThoughtsBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ISlugService _slugService;
+        private readonly IImageService _imageService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService)
+
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _slugService = slugService;
+            _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Posts
@@ -52,6 +61,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
@@ -62,6 +72,7 @@ namespace CoderThoughtsBlog.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
         {
@@ -79,6 +90,13 @@ namespace CoderThoughtsBlog.Controllers
                 post.Slug = slug;
 
                 post.Created = DateTime.Now;
+                //Set the current user to the BlogUserId (Security and necessity)
+                post.BlogUserId = _userManager.GetUserId(User);
+
+                //Convert the image into a byte array.
+                post.ImageData = await _imageService.EncodeImageAsync(post.Image);
+                post.ContentType = _imageService.ContentType(post.Image);
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,6 +107,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,9 +128,10 @@ namespace CoderThoughtsBlog.Controllers
         // POST: Posts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage)
         {
             if (id != post.Id)
             {
@@ -120,10 +140,36 @@ namespace CoderThoughtsBlog.Controllers
 
             if (ModelState.IsValid)
             {
-                post.Updated = DateTime.Now;
+
                 try
                 {
-                    _context.Update(post);
+                    var newPost = await _context.Posts.FindAsync(post.Id);
+
+                    newPost.Updated = DateTime.Now;
+
+                    if (post.Title is not null)
+                    {
+                        newPost.Title = post.Title;
+                    }
+                    if (post.Abstract is not null)
+                    {
+                        newPost.Abstract = post.Abstract;
+                    }
+                    if (post.Content is not null)
+                    {
+                        newPost.Content = post.Content;
+                    }
+                    if (newPost.ReadyStatus != post.ReadyStatus)
+                    {
+                        newPost.ReadyStatus = post.ReadyStatus;
+                    }
+                    if (NewImage is not null)
+                    {
+                        newPost.ImageData = await _imageService.EncodeImageAsync(NewImage);
+                        newPost.ContentType = NewImage.ContentType;
+                    }
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -145,6 +191,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
