@@ -7,17 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CoderThoughtsBlog.Data;
 using CoderThoughtsBlog.Models;
+using CoderThoughtsBlog.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoderThoughtsBlog.Controllers
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public BlogsController(ApplicationDbContext context)
+        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
-;
+            _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Blogs
@@ -47,6 +53,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Blogs/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +62,7 @@ namespace CoderThoughtsBlog.Controllers
         // POST: Blogs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Image")] Blog blog)
@@ -62,9 +70,15 @@ namespace CoderThoughtsBlog.Controllers
             if (ModelState.IsValid)
             {
                 blog.Created = DateTime.Now;
+                //Get the user's Id
+                blog.BlogUserId = _userManager.GetUserId(User);
 
+                //Convert the image into a byte array.
+                blog.ImageData = await _imageService.EncodeImageAsync(blog.Image);
+                blog.ContentType = _imageService.ContentType(blog.Image);
 
                 _context.Add(blog);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

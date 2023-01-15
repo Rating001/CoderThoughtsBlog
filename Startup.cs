@@ -55,6 +55,9 @@ namespace CoderThoughtsBlog
             //Register a Pre-Configured instance of the MailSettings class
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddScoped<IBlogEmailSender, EmailService>();
+
+            //Register the Image Service
+            services.AddScoped<IImageService, BasicImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
