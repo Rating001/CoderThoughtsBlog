@@ -1,4 +1,6 @@
 ﻿using CoderThoughtsBlog.Models;
+using CoderThoughtsBlog.Services.Interfaces;
+using CoderThoughtsBlog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,10 +14,12 @@ namespace CoderThoughtsBlog.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBlogEmailSender _emailSender;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender)
         {
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -32,6 +36,22 @@ namespace CoderThoughtsBlog.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contact(ContactMe model)
+        {
+            //Send an email to the administrator
+            model.Message = $"{model.Message} <hr/> Phone: {model.Phone}";
+            await _emailSender.SendContactEmailAsync(model.Email,model.Name,model.Subject,model.Message);
+
+            return(RedirectToAction("Index"));
+
+            //Possible SWAL
+        }
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

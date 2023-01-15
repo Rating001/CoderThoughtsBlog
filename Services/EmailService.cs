@@ -18,9 +18,25 @@ namespace CoderThoughtsBlog.Services
             _mailSettings = mailSettings.Value;
         }
 
-        public Task SendContactEmailAsync(string emailFrom, string name, string subject, string htmlMessage)
+        public async Task SendContactEmailAsync(string emailFrom, string name, string subject, string htmlMessage)
         {
-            throw new System.NotImplementedException();
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Email);
+            email.To.Add(MailboxAddress.Parse(_mailSettings.Email));
+            email.Subject = subject;
+
+            var builder = new BodyBuilder();
+            builder.HtmlBody = $"<b>{name}</b> has sent you an email and can be reached at: <b>{emailFrom}</b><br/><br/>{htmlMessage}";
+
+            email.Body = builder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.MailHost, _mailSettings.MailPort, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Email, _mailSettings.MailPassword);
+
+            await smtp.SendAsync(email);
+
+            smtp.Disconnect(true);
         }
 
         public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
