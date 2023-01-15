@@ -28,9 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.ReadyStatus)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>
 
             <th></th>
         </tr>
@@ -53,9 +50,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ReadyStatus)
             </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Slug)
-                </td>
 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

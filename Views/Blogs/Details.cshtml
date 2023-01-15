@@ -1,4 +1,6 @@
-﻿@model CoderThoughtsBlog.Models.Blog
+﻿@using CoderThoughtsBlog.Services.Interfaces;
+@model CoderThoughtsBlog.Models.Blog
+@inject IImageService imageService
 
 @{
     ViewData["Title"] = "Blog Details";
@@ -36,20 +38,9 @@
             @Html.DisplayNameFor(model => model.ImageData)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
+            <img src="@imageService.DecodeImage(Model.ImageData!,Model.ContentType!)" class="square-img rounded-start" height="200" alt="...">
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContentType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContentType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BlogUser)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BlogUser.Id)
-        </dd>
+
     </dl>
 </div>
 <div>
