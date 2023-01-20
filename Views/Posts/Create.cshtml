@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group col col-lg-6">
                 <label asp-for="BlogId" class="control-label"></label>
-                <select asp-for="BlogId" class ="form-control" asp-items="ViewBag.BlogId"></select>
+                <select asp-for="BlogId" class="form-control" asp-items="ViewBag.BlogId"></select>
             </div>
             <div class="form-group col col-lg-6">
                 <label asp-for="Title" class="control-label"></label>
@@ -31,22 +31,52 @@
                 <textarea id="summernote" asp-for="Content" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-
-            <div class="form-group col col-lg-6">
-                <label asp-for="ReadyStatus" class="control-label"></label>
-                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
-                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
+            <div class="col-6 form-group">
+                <div class="col">
+                    <label class="control-label">Manage Tags</label>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row mb-4">
+                            <div class="col">
+                                <input type="text" class="form-control" id="TagEntry" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" onclick="AddTag()" class="form-control btn btn-dark btn-sm" name="Add">Add</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" onclick="RemoveTag()" class="form-control btn btn-dark btn-sm" name="Remove">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <select class="form-control" width="100%" multiple name="TagValues" id="TagList"></select>
+                    </div>
+                </div>
             </div>
-            <div class="form-group col col-lg-6">
-                <label asp-for="Image" class="control-label"></label>
-                <input type="file" asp-for="Image" class="form-control" accept=".jpg,.png,.gif,.jpeg" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group col col-lg-4">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        <div>
     </div>
+
+
+
+
+    <div class="form-group col col-lg-6">
+        <label asp-for="ReadyStatus" class="control-label"></label>
+        <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
+        <span asp-validation-for="ReadyStatus" class="text-danger"></span>
+    </div>
+    <div class="form-group col col-lg-6">
+        <label asp-for="Image" class="control-label"></label>
+        <input type="file" asp-for="Image" class="form-control" accept=".jpg,.png,.gif,.jpeg" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+    <div class="form-group col col-lg-6">
+        <button type="submit" value="Create" class="form-control btn btn-dark btn-sm">Create</button>
+    </div>
+    </form>
+</div>
 </div>
 
 <div>
@@ -54,21 +84,28 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script>
-            $('#summernote').summernote({
-                placeholder: 'Place your content here.',
-                tabsize: 2,
-                height: 120,
-                toolbar: [
-                  ['style', ['style']],
-                  ['font', ['bold', 'underline', 'clear']],
-                  ['color', ['color']],
-                  ['para', ['ul', 'ol', 'paragraph']],
-                  ['table', ['table']],
-                  ['insert', ['link', 'picture', 'video']],
-                  ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-              });
-        </script>
+@*    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }*@
+        <script src="~/js/custom.js" />
+    
+    <script>
+        $('#summernote').summernote({
+            placeholder: 'Place your content here.',
+            tabsize: 2,
+            height: 120,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    </script>
+
+    
+
 }

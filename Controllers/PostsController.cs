@@ -41,9 +41,9 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string slug)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
             }
@@ -51,7 +51,8 @@ namespace CoderThoughtsBlog.Controllers
             var post = await _context.Posts
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(p => p.Tags)
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -91,7 +92,8 @@ namespace CoderThoughtsBlog.Controllers
 
                 post.Created = DateTime.Now;
                 //Set the current user to the BlogUserId (Security and necessity)
-                post.BlogUserId = _userManager.GetUserId(User);
+                var authorId = _userManager.GetUserId(User);
+                post.BlogUserId = authorId;
 
                 //Convert the image into a byte array.
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);
@@ -99,6 +101,20 @@ namespace CoderThoughtsBlog.Controllers
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
+
+                //Loop over the incoming list of tagValues.
+                foreach(var tagText in tagValues)
+                {
+                    _context.Add(new Tag()
+                    {
+                        PostId= post.Id,
+                        BlogUserId = authorId,
+                        Text = tagText
+                    });
+                }
+
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
@@ -108,19 +124,20 @@ namespace CoderThoughtsBlog.Controllers
 
         // GET: Posts/Edit/5
         [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string slug)
         {
-            if (id == null)
+            if (slug == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Slug == slug);
             if (post == null)
             {
                 return NotFound();
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
+            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
 
             return View(post);
         }
@@ -131,7 +148,7 @@ namespace CoderThoughtsBlog.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile NewImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -143,7 +160,7 @@ namespace CoderThoughtsBlog.Controllers
 
                 try
                 {
-                    var newPost = await _context.Posts.FindAsync(post.Id);
+                    var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
 
                     newPost.Updated = DateTime.Now;
 
@@ -169,6 +186,19 @@ namespace CoderThoughtsBlog.Controllers
                         newPost.ContentType = NewImage.ContentType;
                     }
 
+                    //Remove all previous Tags and Apply the new list (even if they are the same)
+                    _context.Tags.RemoveRange(newPost.Tags);
+                    foreach(var tagText in tagValues) 
+                    {
+                        _context.Add(new Tag()
+                        {
+                            PostId = post.Id,
+                            BlogUserId = post.BlogUserId,
+                            Text = tagText
+
+                        });
+                    }
+
 
                     await _context.SaveChangesAsync();
                 }
@@ -192,9 +222,9 @@ namespace CoderThoughtsBlog.Controllers
 
         // GET: Posts/Delete/5
         [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string slug)
         {
-            if (id == null)
+            if (slug == null)
             {
                 return NotFound();
             }
@@ -202,7 +232,7 @@ namespace CoderThoughtsBlog.Controllers
             var post = await _context.Posts
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -214,9 +244,9 @@ namespace CoderThoughtsBlog.Controllers
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string slug)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.FirstOrDefaultAsync(m => m.Slug == slug);
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

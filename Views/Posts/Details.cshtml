@@ -13,11 +13,31 @@
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 @Html.Raw(Model.Content)
-                <img class="img-fluid" src="@imageService.DecodeImage(Model.ImageData!,Model.ContentType!)" class="square-img rounded-start" height="200" alt="...">
+                <img src="@imageService.DecodeImage(Model.ImageData!,Model.ContentType!)" class="square-img rounded-start img-fluid" height="200" alt="...">
             </div>
         </div>
     </div>
 </article>
+<hr />
+
+<article>
+    <div class="row">
+        <div class="col text-center font-weight-bold h3">
+            Custom Post Tags
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            @foreach(var tag in Model.Tags)
+            {
+                <a class="btn btn-warning btn-sm btn-outline-dark" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()">#@tag.Text</a>
+            }
+        </div>
+    </div>
+</article>
+
+<hr />
+
 
 <!--Display Comments related to this post-->
 <!--Display the image of the author-->
@@ -34,7 +54,7 @@
 
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-slug="@Model.Slug">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 @section Scripts {
