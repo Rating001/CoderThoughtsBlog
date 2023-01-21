@@ -40,6 +40,24 @@ namespace CoderThoughtsBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+
+
+        // GET: Posts
+        public async Task<IActionResult> BlogPostIndex(int? id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            var posts = _context.Posts.Where(p => p.BlogId == id);
+
+            return View("Index", posts);
+        }
+
+
+
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
@@ -95,11 +113,12 @@ namespace CoderThoughtsBlog.Controllers
                 }
 
                 //Detect incoming duplicate Slugs
-                if (!_slugService.IsUnique(slug))
+                else if (!_slugService.IsUnique(slug))
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The title you provided cannot be used as it results in a duplicate slug.");
                 }
+
 
                 if(validationError)
                 {
