@@ -82,3 +82,13 @@ body {
 option {
     font-weight: bolder;
 }
+
+.swalButton {
+    height: 2rem;
+    width: 7rem;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show > div {
+    outline: 4px solid black;
+    border: 2px solid red;
+}

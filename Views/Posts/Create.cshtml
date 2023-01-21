@@ -87,9 +87,13 @@
 @*    @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }*@
-        <script src="~/js/custom.js" />
+
+
+
     
     <script>
+        let tagValues = '@ViewData["TagValues"]';
+
         $('#summernote').summernote({
             placeholder: 'Place your content here.',
             tabsize: 2,
@@ -106,6 +110,7 @@
         });
     </script>
 
-    
+    <script src="~/js/custom.js"></script>
+
 
 }
