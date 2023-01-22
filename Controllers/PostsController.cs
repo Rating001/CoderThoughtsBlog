@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -23,14 +24,16 @@ namespace CoderThoughtsBlog.Controllers
         private readonly ISlugService _slugService;
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly BlogSearchService _blogSearchService;
 
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
+            _blogSearchService = blogSearchService;
         }
 
         // GET: Posts
@@ -41,21 +44,41 @@ namespace CoderThoughtsBlog.Controllers
         }
 
 
-
+        [Authorize]
         // GET: Posts
-        public async Task<IActionResult> BlogPostIndex(int? id)
+        public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
             if (id is null)
             {
                 return NotFound();
             }
 
-            var posts = _context.Posts.Where(p => p.BlogId == id);
+            var pageNumber = page ?? 1;
+            var pageSize = 3;
 
-            return View("Index", posts);
+            //var posts = _context.Posts.Where(p => p.BlogId == id);
+            var posts = await _context.Posts
+                                .Where(p => p.BlogId == id && p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                .Include(p => p.BlogUser)
+                                .OrderByDescending(p => p.Created)
+                                .ToPagedListAsync(pageNumber,pageSize);
+
+            return View(posts);
         }
 
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["SearchTerm"] = searchTerm;
 
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            var posts = _blogSearchService.Search(searchTerm);
+
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+                         
+
+        }
 
 
         // GET: Posts/Details/5
@@ -70,7 +93,12 @@ namespace CoderThoughtsBlog.Controllers
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.BlogUser)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
+
+
+
             if (post == null)
             {
                 return NotFound();

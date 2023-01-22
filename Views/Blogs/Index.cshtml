@@ -9,7 +9,10 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Administrator"))
+    {
+        <a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a>
+    }
 </p>
 <table class="table">
     <thead>

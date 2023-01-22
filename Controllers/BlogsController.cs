@@ -54,7 +54,7 @@ namespace CoderThoughtsBlog.Controllers
         }
 
         // GET: Blogs/Create
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -63,7 +63,7 @@ namespace CoderThoughtsBlog.Controllers
         // POST: Blogs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,Image")] Blog blog)

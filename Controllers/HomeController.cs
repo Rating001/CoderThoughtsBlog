@@ -39,7 +39,7 @@ namespace CoderThoughtsBlog.Controllers
             var blogs = _context.Blogs
                                 .Include(u => u.BlogUser)
                                 .Where(b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-                                .OrderByDescending(b => b.Updated)
+                                .OrderByDescending(b => b.Created)
                                 .ToPagedListAsync(pageNumber, pageSize);
 
             return View(await blogs);

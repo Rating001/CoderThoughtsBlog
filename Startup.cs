@@ -62,6 +62,9 @@ namespace CoderThoughtsBlog
 
             //Register the Slug Service
             services.AddScoped<ISlugService, SlugService>();
+
+            //Register the Search Service
+            services.AddScoped<BlogSearchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
