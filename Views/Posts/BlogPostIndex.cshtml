@@ -1,61 +1,75 @@
-﻿@using CoderThoughtsBlog.Enums
-@using CoderThoughtsBlog.Services.Interfaces;
-@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
-@inject IImageService imageService
-@model IPagedList<Post>
+﻿@using CoderThoughtsBlog.Models
+@using CoderThoughtsBlog.Services
+@using CoderThoughtsBlog.Services.Interfaces
+@using CoderThoughtsBlog.Enums;
+
+@using Microsoft.AspNetCore.Identity;
+
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+
+@inject IImageService _imageService;
+@inject UserManager<BlogUser> _userManager;
+
+@model IPagedList<Post>;
 
 @{
-    ViewData["Title"] = "Posts Index";
+    ViewData["Title"] = "Coder Thoughts Blog";
 }
 
-<h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Image
-            </th>
-            <th>
-                Title
-            </th>
-            <th>
-                Abstract
-            </th>
+    <div class="row">
 
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+        @foreach (var post in Model)
         {
-            <tr>
-                <td>
-                    <img src="@imageService.DecodeImage(item.ImageData,item.ContentType)" height="200">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Abstract)
-                </td>
+            //Is the logged in user the Author of this post?
+            var isAuthor = false;
+            if(User.Identity.IsAuthenticated)
+            {
+                isAuthor = (post.BlogUserId == _userManager.GetUserId(User));
+            }
 
+            <div class="col-sm-6 col-lg-4">
+                <div class="card border-dark">
+                    
+                    <div class="card-body text-center">
 
-                <td>
-                    <a asp-action="Edit" asp-route-slug="@item.Slug">Edit</a> |
-                    <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                    <a asp-action="Delete" asp-route-slug="@item.Slug">Delete</a>
-                </td>
-            </tr>
+                        <div class="bg-warning">
+                            <hr class="card-hr" />
+                            <h5 class="card-title">@post.Title</h5>
+                            <hr />
+                        </div>
+
+                        <div>
+                            <p class="card-text">
+                                @post.Abstract
+                            </p>
+                        </div>
+
+                        <br />
+
+                        <div class="text-center">
+                            <a class="btn btn-dark btn-sm form-control mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                Read Posts
+                            </a>
+                        </div>
+
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                        {
+                            <div class="text-center">
+                                <a class="btn btn-dark form-control btn-sm mb-2" asp-action="Edit" asp-controller="Posts" asp-route-slug="@post.Slug">Edit Post</a>
+                            </div>
+                        }
+                    <img class="card-img-top" src="@_imageService.DecodeImage(post.ImageData, post.ContentType)" />
+                    </div>
+
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+
+    </div>
+
 
 <hr />
 

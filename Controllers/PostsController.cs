@@ -54,7 +54,7 @@ namespace CoderThoughtsBlog.Controllers
             }
 
             var pageNumber = page ?? 1;
-            var pageSize = 3;
+            var pageSize = 5;
 
             //var posts = _context.Posts.Where(p => p.BlogId == id);
             var posts = await _context.Posts
@@ -300,7 +300,9 @@ namespace CoderThoughtsBlog.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var blogId = post.BlogId.ToString();
+                return RedirectToAction("BlogPostIndex", new { id = blogId });
+
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
 

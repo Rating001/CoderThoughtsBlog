@@ -154,7 +154,7 @@ namespace CoderThoughtsBlog.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(blog);
         }
