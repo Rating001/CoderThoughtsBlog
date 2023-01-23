@@ -15,6 +15,7 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
+using CoderThoughtsBlog.ViewModels;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -84,6 +85,8 @@ namespace CoderThoughtsBlog.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
+            ViewData["Title"] = "Post Details Page";
+
             if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
@@ -95,6 +98,8 @@ namespace CoderThoughtsBlog.Controllers
                 .Include(p => p.Tags)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.BlogUser)
+                .Include(c => c.Comments)
+                .ThenInclude(c => c.Moderator)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
 
@@ -104,7 +109,20 @@ namespace CoderThoughtsBlog.Controllers
                 return NotFound();
             }
 
-            return View(post);
+            var dataVM = new PostDetailsViewModel()
+            {
+                Post = post,
+                Tags = _context.Tags
+                               .Select(t => t.Text.ToLower())
+                               .Distinct()
+                               .ToList()
+            };
+
+            ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
+            ViewData["MainText"] = post.Title;
+            ViewData["SubText"] = post.Abstract;
+
+            return View(dataVM);
         }
 
         // GET: Posts/Create

@@ -16,8 +16,11 @@
 
 @{
     ViewData["Title"] = "Coder Thoughts Blog";
+    ViewData["MainText"] = "Coder Thoughts";
+    ViewData["SubText"] = "The things we think of...";
+    Layout = "~/Views/Shared/_LayoutLander.cshtml";
 }
-
+<div class="container">
     <div class="row">
 
         @foreach (var blog in Model)
@@ -70,7 +73,7 @@
         }
 
     </div>
-
+</div>
 
 <!--Add Paging Controls Here-->
 <div class="row">

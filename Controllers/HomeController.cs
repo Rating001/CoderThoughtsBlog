@@ -4,6 +4,7 @@ using CoderThoughtsBlog.Services.Interfaces;
 using CoderThoughtsBlog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,16 @@ namespace CoderThoughtsBlog.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IBlogEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private readonly IImageService _imageService;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, IImageService imageService, IConfiguration configuration)
         {
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _imageService = imageService;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index(int? page)
@@ -32,6 +37,9 @@ namespace CoderThoughtsBlog.Controllers
             //var blogs = await _context.Blogs
             //                          .Include(b => b.BlogUser)
             //                          .ToListAsync();
+
+
+
 
             var pageNumber = page ?? 1;
             var pageSize = 6;
