@@ -34,8 +34,6 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Index">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">Sample Post</a></li>
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.IsInRole("Administrator"))
                     {
@@ -49,13 +47,12 @@
         </div>
     </nav>
     <!-- Page Header-->
-    <header class="masthead" style="background-image: url(@ViewData["HeaderImage"])">
+@*    <header class="masthead" style="background-image: url(@ViewData["HeaderImage"])">*@
+    <header class="masthead" style="background-image: url('/images/coderthoughtslander.png')">
         <div class="container position-relative px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <div class="site-heading">
-                        <h1>@ViewData["MainText"]</h1>
-                        <span class="subheading">@ViewData["SubText"]</span>
 
                         <form asp-action="SearchIndex" asp-controller="Posts">
                             <div class="input-group mt-5">
@@ -65,6 +62,8 @@
                                 </div>
                             </div>
                         </form>
+@*                        <h5>@ViewData["MainText"]</h5>
+                        <span class="subheading">@ViewData["SubText"]</span>*@
 
                     </div>
                 </div>

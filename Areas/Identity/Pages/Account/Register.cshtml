@@ -2,6 +2,7 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutLander.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -53,18 +54,18 @@
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">
-        <section>
+       @* <section>
             <h4>Use another service to register.</h4>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
+                    //<div>
+                    //    <p>
+                    //        There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                    //        for details on setting up this ASP.NET application to support logging in via external services.
+                    //    </p>
+                    //</div>
                 }
                 else
                 {
@@ -80,7 +81,7 @@
                     </form>
                 }
             }
-        </section>
+        </section>*@
     </div>
 </div>
 

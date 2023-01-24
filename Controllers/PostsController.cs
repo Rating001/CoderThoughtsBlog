@@ -175,7 +175,7 @@ namespace CoderThoughtsBlog.Controllers
 
                 post.Slug = slug;
 
-                post.Created = DateTime.Now;
+                post.Created = DateTime.UtcNow;
                 //Set the current user to the BlogUserId (Security and necessity)
                 var authorId = _userManager.GetUserId(User);
                 post.BlogUserId = authorId;
@@ -247,7 +247,7 @@ namespace CoderThoughtsBlog.Controllers
                 {
                     var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
 
-                    newPost.Updated = DateTime.Now;
+                    newPost.Updated = DateTime.UtcNow;
 
                     if (post.Title is not null)
                     {

@@ -72,7 +72,7 @@ namespace CoderThoughtsBlog.Controllers
                     comment.Created = DateTime.Now;
                     _context.Add(comment);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", "Posts", new { slug =  newComment.Slug}, "commentSection");
+                    return RedirectToAction("Details", "Posts", new { slug =  newComment!.Slug}, "commentSection");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +124,7 @@ namespace CoderThoughtsBlog.Controllers
                 var newComment = await _context.Comments.Include(p => p.Post).FirstOrDefaultAsync(c => c.Id == comment.Id);
                 try
                 {
-                    newComment.Body = comment.Body;
+                    newComment!.Body = comment.Body;
                     newComment.Updated = DateTime.Now;
                     
                     await _context.SaveChangesAsync();
@@ -160,7 +160,7 @@ namespace CoderThoughtsBlog.Controllers
                 var newComment = await _context.Comments.Include(c=>c.Post).FirstOrDefaultAsync(c=> c.Id == comment.Id);
                 try
                 {
-                    newComment.ModeratedBody = comment.ModeratedBody;
+                    newComment!.ModeratedBody = comment.ModeratedBody;
                     newComment.ModerationType = comment.ModerationType;
 
                     newComment.Moderated = DateTime.Now;
@@ -213,7 +213,7 @@ namespace CoderThoughtsBlog.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, string slug)
         {
             var comment = await _context.Comments.FindAsync(id);
-            _context.Comments.Remove(comment);
+            _context.Comments.Remove(comment!);
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", "Posts", new { slug }, "commentSection");
         }

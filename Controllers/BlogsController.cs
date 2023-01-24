@@ -70,7 +70,7 @@ namespace CoderThoughtsBlog.Controllers
         {
             if (ModelState.IsValid)
             {
-                blog.Created = DateTime.Now;
+                blog.Created = DateTime.UtcNow;
                 //Set the current user to the BlogUserId (Security and necessity)
                 blog.BlogUserId = _userManager.GetUserId(User);
 
@@ -81,7 +81,7 @@ namespace CoderThoughtsBlog.Controllers
                 _context.Add(blog);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(blog);
         }
@@ -121,7 +121,7 @@ namespace CoderThoughtsBlog.Controllers
                 try
                 {
                     var editBlog = await _context.Blogs.FindAsync(blog.Id);
-                    editBlog.Updated = DateTime.Now;
+                    editBlog.Updated = DateTime.UtcNow;
                     if(editBlog.Name != blog.Name)
                     {
                         editBlog.Name = blog.Name;

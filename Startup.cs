@@ -4,6 +4,7 @@ using CoderThoughtsBlog.Models;
 using CoderThoughtsBlog.Services;
 using CoderThoughtsBlog.Services.Interfaces;
 using CoderThoughtsBlog.ViewModels;
+using ContactPro.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,9 +31,11 @@ namespace CoderThoughtsBlog
 
         public IConfiguration Configuration { get; }
 
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
