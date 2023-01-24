@@ -10,6 +10,8 @@ using CoderThoughtsBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using CoderThoughtsBlog.Enums;
 using CoderThoughtsBlog.Services;
+using CoderThoughtsBlog.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -17,14 +19,14 @@ namespace CoderThoughtsBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
-        private readonly DataSeedService _dataSeedService;
+        private readonly UserDataService _userDataService;
 
 
-        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, DataSeedService dataSeedService)
+        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, UserDataService userDataService)
         {
             _context = context;
             _userManager = userManager;
-            _dataSeedService = dataSeedService;
+            _userDataService = userDataService;
         }
 
         //GET: Comments
@@ -48,8 +50,7 @@ namespace CoderThoughtsBlog.Controllers
 
         public async Task<IActionResult> SeedIndex()
         {
-            await _dataSeedService.SeedRolesAsync();
-            await _dataSeedService.SeedUsersAsync();
+            await _userDataService.Initialize();
             return RedirectToAction("Index", "Home");
         }
 
@@ -235,4 +236,6 @@ namespace CoderThoughtsBlog.Controllers
             return _context.Comments.Any(e => e.Id == id);
         }
     }
+
+    
 }
