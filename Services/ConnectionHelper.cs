@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Net.NetworkInformation;
 
-namespace ContactPro.Helpers
+namespace CoderThoughtsBlog.Services
 {
     public static class ConnectionHelper
     {

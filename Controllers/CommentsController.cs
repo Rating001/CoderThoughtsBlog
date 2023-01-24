@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CoderThoughtsBlog.Data;
 using CoderThoughtsBlog.Models;
 using Microsoft.AspNetCore.Identity;
+using CoderThoughtsBlog.Enums;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -15,6 +16,7 @@ namespace CoderThoughtsBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
+
 
         public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
@@ -39,6 +41,12 @@ namespace CoderThoughtsBlog.Controllers
             var moderatedComments = await _context.Comments.Where(c => c.Moderated != null)
                 .ToListAsync();
             return View("Index", moderatedComments);
+        }
+
+        public async Task<IActionResult> SeedIndex()
+        {
+            
+            return RedirectToAction("Index", "Home");
         }
 
         //public async Task<IActionResult> DeletedIndex()
@@ -69,7 +77,7 @@ namespace CoderThoughtsBlog.Controllers
                 try
                 {
                     comment.BlogUserId = _userManager.GetUserId(User);
-                    comment.Created = DateTime.Now;
+                    comment.Created = DateTime.UtcNow;
                     _context.Add(comment);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Details", "Posts", new { slug =  newComment!.Slug}, "commentSection");
@@ -125,7 +133,7 @@ namespace CoderThoughtsBlog.Controllers
                 try
                 {
                     newComment!.Body = comment.Body;
-                    newComment.Updated = DateTime.Now;
+                    newComment.Updated = DateTime.UtcNow;
                     
                     await _context.SaveChangesAsync();
                 }
@@ -163,7 +171,7 @@ namespace CoderThoughtsBlog.Controllers
                     newComment!.ModeratedBody = comment.ModeratedBody;
                     newComment.ModerationType = comment.ModerationType;
 
-                    newComment.Moderated = DateTime.Now;
+                    newComment.Moderated = DateTime.UtcNow;
                     newComment.ModeratorId = _userManager.GetUserId(User);
 
                     await _context.SaveChangesAsync();

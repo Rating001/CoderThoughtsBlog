@@ -1,8 +1,12 @@
 ﻿using CoderThoughtsBlog.Data;
+using CoderThoughtsBlog.Enums;
 using CoderThoughtsBlog.Models;
+using CoderThoughtsBlog.Services;
 using CoderThoughtsBlog.Services.Interfaces;
 using CoderThoughtsBlog.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -23,6 +27,8 @@ namespace CoderThoughtsBlog.Controllers
         private readonly IImageService _imageService;
         private readonly IConfiguration _configuration;
 
+
+
         public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, IImageService imageService, IConfiguration configuration)
         {
             _logger = logger;
@@ -30,10 +36,16 @@ namespace CoderThoughtsBlog.Controllers
             _context = context;
             _imageService = imageService;
             _configuration = configuration;
+
         }
 
         public async Task<IActionResult> Index(int? page)
         {
+
+            
+
+            
+
             //var blogs = await _context.Blogs
             //                          .Include(b => b.BlogUser)
             //                          .ToListAsync();
