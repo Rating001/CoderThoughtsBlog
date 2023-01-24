@@ -1,6 +1,7 @@
 ﻿using CoderThoughtsBlog.Data;
 using CoderThoughtsBlog.Enums;
 using CoderThoughtsBlog.Models;
+using CoderThoughtsBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
@@ -8,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace CoderThoughtsBlog.Services
 {
 
-    public class DataSeedService
+    public class DataSeedService : IDataSeedService
     {
         private readonly ApplicationDbContext? _dbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -23,14 +24,14 @@ namespace CoderThoughtsBlog.Services
             _userManager = userManager;
         }
 
-        public async Task SeedAsync()
-        {
-            //Seed a few roles into the system
-            await SeedRolesAsync();
+        //public async Task SeedAsync()
+        //{
+        //    //Seed a few roles into the system
+        //    await SeedRolesAsync();
 
-            //Seed a few users into the system
-            await SeedUsersAsync();
-        }
+        //    //Seed a few users into the system
+        //    await SeedUsersAsync();
+        //}
         public async Task SeedRolesAsync()
         {
             if (_dbContext.Roles.Any())
