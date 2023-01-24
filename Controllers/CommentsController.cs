@@ -9,6 +9,7 @@ using CoderThoughtsBlog.Data;
 using CoderThoughtsBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using CoderThoughtsBlog.Enums;
+using CoderThoughtsBlog.Services;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -16,12 +17,14 @@ namespace CoderThoughtsBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly DataSeedService _dataSeedService;
 
 
-        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager)
+        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, DataSeedService dataSeedService)
         {
             _context = context;
             _userManager = userManager;
+            _dataSeedService = dataSeedService;
         }
 
         //GET: Comments
@@ -45,7 +48,8 @@ namespace CoderThoughtsBlog.Controllers
 
         public async Task<IActionResult> SeedIndex()
         {
-            
+            await _dataSeedService.SeedRolesAsync();
+            await _dataSeedService.SeedUsersAsync();
             return RedirectToAction("Index", "Home");
         }
 
