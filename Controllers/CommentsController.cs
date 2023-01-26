@@ -25,7 +25,7 @@ namespace CoderThoughtsBlog.Controllers
         {
             _context = context;
             _userManager = userManager;
-            _dataSeedService = dataSeedService;
+            _userDataService = userDataService;
         }
 
         //GET: Comments
@@ -49,8 +49,7 @@ namespace CoderThoughtsBlog.Controllers
 
         public async Task<IActionResult> SeedIndex()
         {
-            await _dataSeedService.SeedRolesAsync();
-            await _dataSeedService.SeedUsersAsync();
+            await _userDataService.Initialize();
             return RedirectToAction("Index", "Home");
         }
 
@@ -236,4 +235,6 @@ namespace CoderThoughtsBlog.Controllers
             return _context.Comments.Any(e => e.Id == id);
         }
     }
+
+    
 }

@@ -42,6 +42,9 @@ builder.Services.AddScoped<IDataSeedService, DataSeedService>();
 //Register the Search Service
 builder.Services.AddScoped<BlogSearchService>();
 
+////Register the UserDataService
+builder.Services.AddScoped<UserDataService>();
+
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
@@ -77,7 +80,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
 app.Run();
 
 

@@ -18,6 +18,11 @@ using CoderThoughtsBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using CoderThoughtsBlog.Services;
+using CoderThoughtsBlog.Enums;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using CoderThoughtsBlog.Data;
 
 namespace CoderThoughtsBlog.Areas.Identity.Pages.Account
 {
@@ -31,6 +36,7 @@ namespace CoderThoughtsBlog.Areas.Identity.Pages.Account
         private readonly IBlogEmailSender _emailSender;
         private readonly IImageService _imageService;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<BlogUser> userManager,
@@ -38,7 +44,8 @@ namespace CoderThoughtsBlog.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IBlogEmailSender emailSender,
             IImageService imageService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -46,6 +53,7 @@ namespace CoderThoughtsBlog.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _imageService = imageService;
             _configuration = configuration;
+            _context = context;
         }
 
         [BindProperty]
@@ -155,5 +163,8 @@ namespace CoderThoughtsBlog.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
+
     }
 }
