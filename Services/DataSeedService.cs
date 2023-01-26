@@ -57,11 +57,12 @@ namespace CoderThoughtsBlog.Services
             else
             {
                 //1) Create a new instance of BlogUser
+                
                 var adminUser = new BlogUser()
                 {
                     Email = "rating001@aol.com",
                     UserName = "rating001@aol.com",
-                    DisplayName = "KenCodes",
+                    DisplayName = "Ken Codes",
                     FirstName = "Ken",
                     LastName = "Klein",
                     PhoneNumber = "5099392153",
@@ -92,6 +93,8 @@ namespace CoderThoughtsBlog.Services
 
                 //3) Add this new user to the Moderator Role
                 await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
+
+                await _dbContext.SaveChangesAsync();
             }
         }
             
