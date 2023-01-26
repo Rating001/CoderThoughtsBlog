@@ -30,7 +30,14 @@ namespace CoderThoughtsBlog.Services
             builder.HtmlBody = $"<b>{name}</b> has sent you an email and can be reached at: <b>{emailFrom}</b><br/><br/>{htmlMessage}";
 
             email.Body = builder.ToMessageBody();
-            var port = _mailSettings.MailPort != 0 ? _mailSettings.MailPort : int.Parse(Environment.GetEnvironmentVariable("MailPort")!);
+            var port = 0;
+            if (_mailSettings.MailPort is not 0)
+            {
+                port = _mailSettings.MailPort;
+            } else
+            {
+                port = int.Parse(Environment.GetEnvironmentVariable("MailPort"))!;
+            }
 
             using var smtp = new SmtpClient();
             smtp.Connect((_mailSettings.MailHost ?? Environment.GetEnvironmentVariable("MailHost")), (port), SecureSocketOptions.StartTls);
@@ -55,7 +62,17 @@ namespace CoderThoughtsBlog.Services
                 HtmlBody = htmlMessage
             };
 
-            var port = _mailSettings.MailPort != 0 ? _mailSettings.MailPort : int.Parse(Environment.GetEnvironmentVariable("MailPort")!);
+            var port = 0;
+            if (_mailSettings.MailPort is not 0)
+            {
+                port = _mailSettings.MailPort;
+            }
+            else
+            {
+                port = int.Parse(Environment.GetEnvironmentVariable("MailPort"))!;
+            }
+
+            //var port = _mailSettings.MailPort != 0 ? _mailSettings.MailPort : int.Parse(Environment.GetEnvironmentVariable("MailPort")!);
             email.Body = builder.ToMessageBody();
 
             using var smtp = new SmtpClient();
