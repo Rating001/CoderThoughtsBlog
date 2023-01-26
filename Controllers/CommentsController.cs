@@ -51,8 +51,8 @@ namespace CoderThoughtsBlog.Controllers
 
         public async Task<IActionResult> SeedIndex()
         {
-            _dataSeedService.SeedRolesAsync();
-            _dataSeedService.SeedUsersAsync();
+            await _dataSeedService.SeedRolesAsync();
+            await _dataSeedService.SeedUsersAsync();
             return RedirectToAction("Index", "Home");
         }
 
