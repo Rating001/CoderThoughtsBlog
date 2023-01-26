@@ -20,13 +20,15 @@ namespace CoderThoughtsBlog.Controllers
         private readonly UserManager<BlogUser> _userManager;
         private readonly IDataSeedService _dataSeedService;
 
-
         public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, IDataSeedService dataSeedService)
         {
             _context = context;
             _userManager = userManager;
-            _userDataService = userDataService;
+            _dataSeedService = dataSeedService;
         }
+
+
+
 
         //GET: Comments
         public async Task<IActionResult> Index()
@@ -49,7 +51,8 @@ namespace CoderThoughtsBlog.Controllers
 
         public async Task<IActionResult> SeedIndex()
         {
-            await _userDataService.Initialize();
+            _dataSeedService.SeedRolesAsync();
+            _dataSeedService.SeedUsersAsync();
             return RedirectToAction("Index", "Home");
         }
 
