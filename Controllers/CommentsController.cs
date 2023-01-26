@@ -10,6 +10,7 @@ using CoderThoughtsBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using CoderThoughtsBlog.Enums;
 using CoderThoughtsBlog.Services;
+using CoderThoughtsBlog.Services.Interfaces;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -17,10 +18,10 @@ namespace CoderThoughtsBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
-        private readonly DataSeedService _dataSeedService;
+        private readonly IDataSeedService _dataSeedService;
 
 
-        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, DataSeedService dataSeedService)
+        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager, IDataSeedService dataSeedService)
         {
             _context = context;
             _userManager = userManager;

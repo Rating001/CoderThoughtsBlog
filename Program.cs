@@ -6,6 +6,7 @@ using CoderThoughtsBlog.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 // Custom Services
@@ -33,6 +36,8 @@ builder.Services.AddScoped<IImageService, BasicImageService>();
 
 //Register the Slug Service
 builder.Services.AddScoped<ISlugService, SlugService>();
+
+builder.Services.AddScoped<IDataSeedService, DataSeedService>();
 
 //Register the Search Service
 builder.Services.AddScoped<BlogSearchService>();
