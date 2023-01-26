@@ -41,7 +41,7 @@ namespace CoderThoughtsBlog.Services
 
             using var smtp = new SmtpClient();
             smtp.Connect((_mailSettings.MailHost ?? Environment.GetEnvironmentVariable("MailHost")), (port), SecureSocketOptions.StartTls);
-            smtp.Authenticate(_mailSettings.Email, _mailSettings.MailPassword);
+            smtp.Authenticate((_mailSettings.Email ?? Environment.GetEnvironmentVariable("Email")), (_mailSettings.MailPassword) ?? Environment.GetEnvironmentVariable("MailPassword"));
 
             await smtp.SendAsync(email);
 
