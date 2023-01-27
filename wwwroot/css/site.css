@@ -1,13 +1,24 @@
 ﻿/*General Settings*/
+html{
+    height:100%;
+}
+
 body {
-    --foreground-color: 
+    --foreground-: rgb(25, 25, 25);
+    --background-: rgb(238, 238, 238);
+    color: var(--foreground-);
+    background-color:var(--background-);
+
     
     
     
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family:'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     
 }
 
+.image-header {
+    min-height: 200px;
+}
 
 
 
