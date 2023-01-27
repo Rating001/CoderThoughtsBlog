@@ -34,11 +34,11 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Index">Blog</a></li>
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.IsInRole("Administrator"))
                     {
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Posts" asp-action="Create">Create Blog</a></li>
                     }
                 </ul>
 
@@ -48,11 +48,13 @@
         </div>
     </nav>
     <!-- Page Header-->
-    <header class="masthead" style="background-image: url('/images/coderthoughtslander.png');">
+    <header class="masthead" style="background-image: url('/images/home-bg.jpg');">
 
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <div class="">
+                        <h1>Coder Thoughts</h1>
+                        <h5>A place to get out of your head.</h5>
 <br />
                         <br />
 

@@ -1,4 +1,18 @@
-﻿/*Navigation*/
+﻿/*General Settings*/
+body {
+    --foreground-color: 
+    
+    
+    
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+}
+
+
+
+
+
+/*Navigation*/
 
 .nav {
     display:inline-block;
