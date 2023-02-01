@@ -11,7 +11,11 @@ const enableDarkMode = () => {
     //1) Add a "dark-mode" class to the body
     document.body.classList.remove('light-mode');
     document.body.classList.add('dark-mode');
-    //2) Update darkMode in the local storage to 'enabled'
+
+    //2 Change the header to the dark mode header
+    document.getElementById('header-text').src="../images/coder-thoughts-header-dark.png";
+
+    //3) Update darkMode in the local storage to 'enabled'
     localStorage.setItem('darkModeCoderThoughts', 'enabled');
 }
 
@@ -19,7 +23,11 @@ const disableDarkMode = () => {
     //1) Add a "light-mode" class to the body
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
-    //2) Update darkMode in the local storage to null
+
+    //2 Change the header to the light mode header
+    document.getElementById('header-text').src = "../images/coder-thoughts-header-light.png";
+
+    //3) Update darkMode in the local storage to null
     localStorage.setItem('darkModeCoderThoughts', null);
 }
 

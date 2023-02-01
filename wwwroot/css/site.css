@@ -4,10 +4,11 @@ html {
 }
 
 body {
-    --foreground-: rgb(25, 25, 25);
-    --background-: rgb(238, 238, 238);
-    color: var(--foreground-);
-    background-color: var(--background-);
+    --dark-color-:rgb(25,25,25);
+    --light-color-:rgb(238,238,238);
+
+    --foreground-: var(--dark-color-);
+    --background-: var(--light-color-);
     font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -28,19 +29,27 @@ body {
 }
 
 .dark-toggle {
-    fill: var(--background);
-    stroke: var(--foreground);
+    fill: var(--background-);
+    stroke: var(--foreground-);
     stroke-width: 1;
     transition: stroke-width, .5s;
 }
 
     .dark-toggle:hover {
         stroke-width: 3;
-        stroke: var(--foreground);
+        stroke: var(--foreground-);
     }
 
+/*
+#header-text {
 
-.image-header-light {
+}*/
+
+
+
+
+
+.image-header {
     background-image: url(../images/home-bg.jpg);
     background-size: cover;
     background-repeat: no-repeat;
@@ -48,7 +57,13 @@ body {
     width: auto;
 }
 
-
+.dark-mode .image-header {
+    background-image: url(../images/home-bg-dark.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    width: auto;
+}
 
 
 /*Navigation*/
@@ -59,6 +74,10 @@ body {
 
 .name-down {
     margin: 1px 0 0 0;
+}
+
+#navbarResponsive {
+    color: var(--foreground-)
 }
 
 #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
