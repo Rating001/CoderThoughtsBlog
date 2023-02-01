@@ -1,23 +1,51 @@
 ﻿/*General Settings*/
-html{
-    height:100%;
+html {
+    height: 100%;
 }
 
 body {
     --foreground-: rgb(25, 25, 25);
     --background-: rgb(238, 238, 238);
     color: var(--foreground-);
-    background-color:var(--background-);
-
-    
-    
-    
-    font-family:'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    
+    background-color: var(--background-);
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-.image-header {
-    min-height: 200px;
+.light-mode {
+    color: var(--foreground-);
+    background-color: var(--background-);
+}
+
+.dark-mode {
+    color: var(--background-);
+    background-color: var(--foreground-);
+}
+
+.dark-mode-toggle {
+    background: transparent;
+    cursor: pointer;
+    border: none;
+}
+
+.dark-toggle {
+    fill: var(--background);
+    stroke: var(--foreground);
+    stroke-width: 1;
+    transition: stroke-width, .5s;
+}
+
+    .dark-toggle:hover {
+        stroke-width: 3;
+        stroke: var(--foreground);
+    }
+
+
+.image-header-light {
+    background-image: url(../images/home-bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    width: auto;
 }
 
 
@@ -26,7 +54,7 @@ body {
 /*Navigation*/
 
 .nav {
-    display:inline-block;
+    display: inline-block;
 }
 
 .name-down {
@@ -41,17 +69,25 @@ body {
     background-color: transparent;
     transition: all .2s;
     display: block;
-    text-decoration:none;
+    text-decoration: none;
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
     text-transform: uppercase;
     padding: 10px 20px;
-    color: rgba(255,255,255,.8);
+    color: var(--foreground-);
 }
+
+    #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button:hover {
+        color: #9a9a9a;
+    }
 
 .nav-identity {
     padding-top: 18px !important;
+}
+
+.nav-color {
+    color: black;
 }
 
 .media-border {
@@ -72,9 +108,15 @@ select, input, textarea, option, label, .tooltip-inner {
     header.masthead .post-heading,
     header.masthead .site-heading {
         padding: 100px 0 100px 0;
-
     }
 
+.title {
+    text-align: center;
+}
+
+.title-image {
+    height: 15rem;
+}
 /*Google Map*/
 #map {
     height: 400px;

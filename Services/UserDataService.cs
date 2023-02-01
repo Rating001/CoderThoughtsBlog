@@ -39,7 +39,7 @@ namespace CoderThoughtsBlog.Services
                     //If there are no roles in the database, create the roles in BlogRole
                     if (!_context.Roles.Any())
                     {
-                        roleStore.CreateAsync(new IdentityRole(role));
+                        await roleStore.CreateAsync(new IdentityRole(role));
                     }
                 }
 
