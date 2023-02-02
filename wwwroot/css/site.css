@@ -4,22 +4,28 @@ html {
 }
 
 body {
-    --dark-color-:rgb(25,25,25);
-    --light-color-:rgb(238,238,238);
-
+    --dark-color-: rgb(25,25,25);
+    --light-color-: rgb(238,238,238);
+    --special-color-: rgb(212, 255, 219);
     --foreground-: var(--dark-color-);
     --background-: var(--light-color-);
+    color: var(--foreground-);
+    background-color: var(--background-);
     font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .light-mode {
-    color: var(--foreground-);
-    background-color: var(--background-);
+    --foreground-: var(--dark-color-);
+    --background-: var(--light-color-);
+    --special-color-: rgb(212, 255, 219);
+    transition: all 0.5s;
 }
 
 .dark-mode {
-    color: var(--background-);
-    background-color: var(--foreground-);
+    --foreground-: var(--light-color-);
+    --background-: var(--dark-color-);
+    --special-color-: darkgreen;
+    transition: all 0.5s;
 }
 
 .dark-mode-toggle {
@@ -29,7 +35,7 @@ body {
 }
 
 .dark-toggle {
-    fill: var(--background-);
+    fill: var(--foreground-);
     stroke: var(--foreground-);
     stroke-width: 1;
     transition: stroke-width, .5s;
@@ -55,6 +61,7 @@ body {
     background-repeat: no-repeat;
     background-color: #fff;
     width: auto;
+    transition: all 0.5s;
 }
 
 .dark-mode .image-header {
@@ -63,6 +70,7 @@ body {
     background-repeat: no-repeat;
     background-color: #fff;
     width: auto;
+    transition: all 0.5s;
 }
 
 
@@ -80,34 +88,39 @@ body {
     color: var(--foreground-)
 }
 
-#navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
-    line-height: 1.5;
-    font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    list-style: none;
-    box-sizing: border-box;
-    background-color: transparent;
-    transition: all .2s;
-    display: block;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    color: var(--foreground-);
-}
-
-    #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button:hover {
-        color: #9a9a9a;
+    #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
+        line-height: 1.5;
+        font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        list-style: none;
+        box-sizing: border-box;
+        background-color: transparent;
+        transition: all .2s;
+        display: block;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 10px 20px;
+        color: var(--foreground-);
     }
+
+        #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button:hover {
+            color: #9a9a9a;
+        }
 
 .nav-identity {
     padding-top: 18px !important;
 }
 
 .nav-color {
-    color: black;
+    color: var(--foreground-) !important;
+    transition: all 0.5s;
 }
+
+    .nav-color:hover {
+        color: #9a9a9a !important;
+    }
 
 .media-border {
     border: 2px solid black;
@@ -133,6 +146,14 @@ select, input, textarea, option, label, .tooltip-inner {
     text-align: center;
 }
 
+.table {
+    color:var(--foreground-);
+}
+
+a {
+    color: var(--foreground-);
+}
+
 .title-image {
     height: 15rem;
 }
@@ -146,8 +167,11 @@ select, input, textarea, option, label, .tooltip-inner {
 }
 
 /*Summernote*/
+
 .note-editable, .note-placeholder {
     font-size: 22px;
+    background-color: var(--light-color-);
+    color: var(--dark-color-);
 }
 
 .btn-tag {
@@ -157,6 +181,7 @@ select, input, textarea, option, label, .tooltip-inner {
 .btn-sm {
     line-height: 1;
     border-radius: 10px;
+    border-color: var(--foreground-)
 }
 
 .btnWide, .btn-tag {
@@ -165,7 +190,8 @@ select, input, textarea, option, label, .tooltip-inner {
 
 .btn-dark:hover {
     border: 1px solid #ff993b;
-    background-color: darkgreen;
+    background-color: var(--special-color-);
+    color: var(--foreground-);
 }
 
 .btn-warning {
@@ -187,9 +213,20 @@ select, input, textarea, option, label, .tooltip-inner {
 
 /*Card Styling*/
 
+.card {
+    color: var(--foreground-);
+    background-color: var(--background-);
+    border-color: var(--foreground-);
+}
+
+.card-img-top {
+    color: var(--foreground-);
+    background-color: var(--background-);
+}
+
 .card-hr {
-    color: #212121;
-    background-color: #212121;
+    color: var(--foreground-);
+    background-color: var(--background-);
     height: 3px;
 }
 
@@ -197,14 +234,23 @@ select, input, textarea, option, label, .tooltip-inner {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    color: var(--foreground-);
     overflow: hidden;
 }
 
+.card-title-color {
+
+    background-color: var(--foreground-);
+}
+
 .card-title {
+    color: var(--background-);
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-family: 'Itim', cursive;
+    letter-spacing: normal;
 }
 
 .card-img, .card-img-top, .card-img-bottom {
@@ -214,12 +260,18 @@ select, input, textarea, option, label, .tooltip-inner {
 /*Page Styles*/
 
 .page-item.active .page-link {
-    background-color: #212121;
-    border-color: black;
+    background-color: var(--special-color-);
+    border-color: var(--foreground-);
+    color: var(--foreground-);
+    font-weight: bolder;
 }
 
+
+
 .page-link {
-    color: #212121;
+    background-color: var(--special-color-);
+    border-color: var(--foreground-);
+    color: var(--foreground-);
 }
 
 /*Sweet Alert Styles*/
@@ -276,4 +328,15 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 ::-webkit-scrollbar-thumb {
     background: #212121;
     border-radius: 10px;
+}
+
+.footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-right: .5rem;
+    background-color: var(--dark-color);
 }

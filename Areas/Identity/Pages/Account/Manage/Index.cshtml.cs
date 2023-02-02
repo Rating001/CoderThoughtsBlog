@@ -42,8 +42,8 @@ namespace CoderThoughtsBlog.Areas.Identity.Pages.Account.Manage
         {
             [Phone]
             [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
-            public IFormFile Image { get; set; }
+            public string? PhoneNumber { get; set; }
+            public IFormFile? Image { get; set; }
         }
 
         private async Task LoadAsync(BlogUser user)

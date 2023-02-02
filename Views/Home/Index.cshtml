@@ -26,11 +26,11 @@
         @foreach (var blog in Model)
         {
             <div class="col-sm-12 col-md-6 col-lg-4 mt-2">
-                <div class="card border-dark">
+                <div class="card">
                     <img class="card-img-top" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" />
                     <div class="card-body text-center">
 
-                        <div class="bg-warning">
+                        <div class="card-title-color">
                             <hr class="card-hr" />
                             <h5 class="card-title">@blog.Name</h5>
                             <hr />
@@ -77,20 +77,21 @@
 
 <!--Add Paging Controls Here-->
 <div class="row">
-    <div class="col h3">
+    <div class="col h3 ms-2">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     </div>
 </div>
 <div class="row">
-    <div class="col">
+    <div class="col ms-2">
         @Html.PagedListPager(Model, page => Url.Action("Index",new {page = page}),
         new PagedListRenderOptionsBase
         {
         LiElementClasses = new string[] { "page-item" },
         PageClasses = new string[] { "page-link" }
-        })
+        })        
     </div>
 </div>
+
 
 @section Scripts {
     <script>

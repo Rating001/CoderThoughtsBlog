@@ -12,7 +12,6 @@ const enableDarkMode = () => {
     document.body.classList.remove('light-mode');
     document.body.classList.add('dark-mode');
 
-
     //3) Update darkMode in the local storage to 'enabled'
     localStorage.setItem('darkModeCoderThoughts', 'enabled');
 }
@@ -21,7 +20,6 @@ const disableDarkMode = () => {
     //1) Add a "light-mode" class to the body
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
-
 
     //3) Update darkMode in the local storage to null
     localStorage.setItem('darkModeCoderThoughts', null);
