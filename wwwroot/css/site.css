@@ -14,6 +14,10 @@ body {
     font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+h6 {
+    font-weight: 100;
+}
+
 .light-mode {
     --foreground-: var(--dark-color-);
     --background-: var(--light-color-);
@@ -85,7 +89,8 @@ body {
 }
 
 #navbarResponsive {
-    color: var(--foreground-)
+    color: var(--foreground-) !important;
+    background-color: transparent;
 }
 
     #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
@@ -109,12 +114,29 @@ body {
             color: #9a9a9a;
         }
 
+
+
 .nav-identity {
     padding-top: 18px !important;
 }
 
+navbar-toggle-color {
+    color: var(--foreground-) !important;
+    background-color: var(--background-);
+}
+
+.navbar-toggle-color:hover {
+    color: #9a9a9a !important;
+}
+
+.nav-bg-color {
+    color: var(--foreground-) !important;
+    transition: all 0.5s;
+}
+
 .nav-color {
     color: var(--foreground-) !important;
+    background-color: var(--background-)l
     transition: all 0.5s;
 }
 
@@ -154,6 +176,10 @@ a {
     color: var(--foreground-);
 }
 
+footer a {
+    color:var(--background-);
+}
+
 .title-image {
     height: 15rem;
 }
@@ -162,7 +188,7 @@ a {
     height: 400px;
 }
 
-.noline {
+.no-line {
     text-decoration: none;
 }
 
@@ -174,14 +200,40 @@ a {
     color: var(--dark-color-);
 }
 
+.btn-color {
+    border-color: var(--background-);
+    background-color: var(--foreground-);
+    color: var(--background-);
+    border-radius: 15px;
+}
+
+.btn-color:hover {
+    border: 1px solid var(--foreground-);
+    background-color: var(--special-color-);
+    color: var(--foreground-);
+
+}
+
 .btn-tag {
     margin-top: 10px;
+}
+
+.btn-lg {
+    border-radius: 15px;
+}
+
+.btn-lg:hover {
+    border: 1px solid var(--foreground-);
+    background-color: var(--special-color-);
+    color: var(--foreground-);
 }
 
 .btn-sm {
     line-height: 1;
     border-radius: 10px;
-    border-color: var(--foreground-)
+    border-color: var(--foreground-);
+
+
 }
 
 .btnWide, .btn-tag {
@@ -189,7 +241,7 @@ a {
 }
 
 .btn-dark:hover {
-    border: 1px solid #ff993b;
+    border: 1px solid var(--foreground-);
     background-color: var(--special-color-);
     color: var(--foreground-);
 }
@@ -211,17 +263,34 @@ a {
     width: 7rem;
 }
 
+/*Social Buttons*/
+
+.social {
+    color: #9a9a9a;
+}
+
+.social:hover {
+    color: var(--special-color-);
+}
+
+.social-inner {
+    color:var(--background-);
+}
+
 /*Card Styling*/
 
 .card {
     color: var(--foreground-);
     background-color: var(--background-);
     border-color: var(--foreground-);
+    border-radius: 10px;
 }
 
 .card-img-top {
     color: var(--foreground-);
     background-color: var(--background-);
+    border-radius:10px;
+    
 }
 
 .card-hr {
@@ -239,8 +308,8 @@ a {
 }
 
 .card-title-color {
-
     background-color: var(--foreground-);
+    border-radius: 15px;
 }
 
 .card-title {
@@ -251,6 +320,8 @@ a {
     overflow: hidden;
     font-family: 'Itim', cursive;
     letter-spacing: normal;
+
+    
 }
 
 .card-img, .card-img-top, .card-img-bottom {

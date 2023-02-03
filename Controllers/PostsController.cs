@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
 using CoderThoughtsBlog.ViewModels;
+using MailKit.Search;
 
 namespace CoderThoughtsBlog.Controllers
 {
@@ -26,15 +27,17 @@ namespace CoderThoughtsBlog.Controllers
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
         private readonly BlogSearchService _blogSearchService;
+        private readonly TagSearchService _tagSearchService;
 
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService, TagSearchService tagSearchService)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
             _blogSearchService = blogSearchService;
+            _tagSearchService = tagSearchService;
         }
 
         // GET: Posts
@@ -62,12 +65,12 @@ namespace CoderThoughtsBlog.Controllers
                                 .Where(p => p.BlogId == id && p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
                                 .Include(p => p.BlogUser)
                                 .OrderByDescending(p => p.Created)
-                                .ToPagedListAsync(pageNumber,pageSize);
+                                .ToPagedListAsync(pageNumber, pageSize);
 
             return View(posts);
         }
 
-        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        public async Task<IActionResult> SearchIndex(int? page, string? searchTerm)
         {
             ViewData["SearchTerm"] = searchTerm;
 
@@ -77,8 +80,41 @@ namespace CoderThoughtsBlog.Controllers
             var posts = _blogSearchService.Search(searchTerm);
 
             return View(await posts.ToPagedListAsync(pageNumber, pageSize));
-                         
 
+
+        }
+
+        public async Task<IActionResult> TagIndex(int? page, string? tag)
+        {
+            if (tag is null)
+            {
+                return NotFound();
+            }
+
+            var pageNumber = page ?? 1;
+            var pageSize = 6;
+
+            var posts = _tagSearchService.Search(tag);
+
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+
+
+            //var posts = _context.Posts.Where(p => p.BlogId == id);
+            //var posts = await _context.Posts
+            //                          .Include(p => p.Tags)
+            //                          .ThenInclude(p => p.Text)
+            //                          .OrderByDescending(p => p.Updated)
+            //                          .ToPagedListAsync(pageNumber, pageSize);
+
+
+
+            //.Tags
+            //.Where(t => t.Text == tag)
+            //.Include(t => t.Post)
+            //.OrderByDescending(p => p.Post.Updated)
+            //.ToPagedListAsync(pageNumber, pageSize);
+
+            //return View(posts);
         }
 
 
@@ -145,7 +181,7 @@ namespace CoderThoughtsBlog.Controllers
             {
                 //Create the slug and determine if it is unique
                 var slug = _slugService.UrlFriendly(post.Title);
-                var newSlug = post.Slug; 
+                var newSlug = post.Slug;
                 //Create a variable to store whether an error has occurred
                 var validationError = false;
 
@@ -166,7 +202,7 @@ namespace CoderThoughtsBlog.Controllers
                 }
 
 
-                if(validationError)
+                if (validationError)
                 {
                     ViewData["TagValues"] = string.Join(",", tagValues);
                     ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
@@ -188,11 +224,11 @@ namespace CoderThoughtsBlog.Controllers
                 await _context.SaveChangesAsync();
 
                 //Loop over the incoming list of tagValues.
-                foreach(var tagText in tagValues)
+                foreach (var tagText in tagValues)
                 {
                     _context.Add(new Tag()
                     {
-                        PostId= post.Id,
+                        PostId = post.Id,
                         BlogUserId = authorId,
                         Text = tagText
                     });
@@ -207,7 +243,10 @@ namespace CoderThoughtsBlog.Controllers
             return View(post);
         }
 
-        // GET: Posts/Edit/5
+        // GET: Posts/TagIndex/tagtext
+
+
+        // GET: Posts/Edit/slug
         [Authorize]
         public async Task<IActionResult> Edit(string slug)
         {
@@ -269,7 +308,7 @@ namespace CoderThoughtsBlog.Controllers
                     var newSlug = _slugService.UrlFriendly(post.Title);
 
                     //Check is the original slug (newSlug) matches the new slug
-                    if (newSlug!= newPost.Slug)
+                    if (newSlug != newPost.Slug)
                     {
                         if (_slugService.IsUnique(newSlug))
                         {
@@ -293,7 +332,7 @@ namespace CoderThoughtsBlog.Controllers
 
                     //Remove all previous Tags and Apply the new list (even if they are the same)
                     _context.Tags.RemoveRange(newPost.Tags);
-                    foreach(var tagText in tagValues) 
+                    foreach (var tagText in tagValues)
                     {
                         _context.Add(new Tag()
                         {

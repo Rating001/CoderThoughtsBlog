@@ -23,7 +23,7 @@ namespace CoderThoughtsBlog.Services
                                 .AsQueryable();
 
             //var tags = _context.Posts.Include(p => p.Tags)
-            //                         .ThenInclude(t=>t.Text == searchTerm)
+            //                         .ThenInclude(t => t.Text == searchTerm)
             //                         .AsQueryable();
 
             //var searchResults = posts.Concat(tags);

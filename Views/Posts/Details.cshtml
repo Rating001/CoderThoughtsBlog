@@ -9,12 +9,22 @@
 @inject UserManager<BlogUser> userManager
 @model PostDetailsViewModel
 
+
+
 <article>
+    <h1 class="mt-4">@ViewData["MainText"]</h1>
+    <h6>Written by @Model.Post.BlogUser.FullName on @Model.Post.Created?.ToString("MMM dd, yyyy")</h6>
+    @if (Model.Post.Updated is not null)
+    {
+        <span class="small">
+            Updated on @Model.Post.Updated?.ToString("MMM dd, yyyy")
+        </span>
+    }
     <div class="row">
-        <div class="col-9 border-right">
+        <div class="col-12 border-right">
             @Html.Raw(Model.Post.Content)
         </div>
-        <div class="col-3 text-center font-weight-bold h6">
+        @*<div class="col-3 text-center font-weight-bold h6">
             <div class="card">
                 <img class="card-img-top" src="/images/tags.png" alt="Tags...">
                 <div class="card-body">
@@ -27,7 +37,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 
 </article>
@@ -38,7 +48,7 @@
     <div class="col text-center">
         @foreach (var tag in Model.Post.Tags.ToList())
         {
-            <a asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag.Text</a>
+            <span class="mb-1 btn btn-dark btn-sm">#@tag.Text</span>
         }
     </div>
     <hr />
