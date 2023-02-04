@@ -50,5 +50,22 @@ namespace CoderThoughtsBlog.Services
             
         }
 
+
+        public IQueryable<Post> TagSearch()
+        {
+            var posts = _context.Posts
+                                .Where(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                .AsQueryable();
+
+            //var tags = _context.Posts.Include(p => p.Tags)
+            //                         .ThenInclude(t => t.Text == searchTerm)
+            //                         .AsQueryable();
+
+            //var searchResults = posts.Concat(tags);
+
+            return posts.OrderByDescending(p => p.Created);
+
+        }
+
     }
 }

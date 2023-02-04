@@ -42,9 +42,6 @@ builder.Services.AddScoped<IDataSeedService, DataSeedService>();
 //Register the Search Service
 builder.Services.AddScoped<BlogSearchService>();
 
-//Register the Search Service
-builder.Services.AddScoped<TagSearchService>();
-
 ////Register the UserDataService
 builder.Services.AddScoped<UserDataService>();
 

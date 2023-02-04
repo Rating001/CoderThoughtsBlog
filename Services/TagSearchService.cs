@@ -16,26 +16,30 @@ namespace CoderThoughtsBlog.Services
             _context = context;
         }
 
-        public IQueryable<Post> Search(string tag)
+        public IQueryable<Tag> Search(string tag)
         {
-            var posts = _context.Posts
-                                .Include(p => p.Tags)
-                                .ThenInclude(p=>p.Text)
-                                .Where(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
-                                .AsQueryable();
+            var tags = _context.Tags
+                               .Where(t=>t.Text == tag)
+                               .Include(p=>p.Post)
+                               .AsQueryable();
+
+
+
+                                //.Include(p => p.Tags)
+                                //.Where(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                //.AsQueryable();
 
             //var posts = _context.Posts.Include(p => p.Tags)
             //                         .ThenInclude(t => t.Text == tag && t.Post.ReadyStatus == Enums.ReadyStatus.ProductionReady)
             //                         .AsQueryable();
 
-            var searchResults = posts.Concat(posts);
+            //var searchResults = posts.Concat(posts);
 
-            //if (tag is not null)
-            //{
-            //    tag = tag.ToLower();
+            if (tag is not null)
+            {
+                tag = tag.ToLower();
 
-
-            //    posts = posts.Where(p => p.
+                tags = tags.Where(t => t.Text == tag);
 
             //p.Title.ToLower().Contains(searchTerm) ||
             //p.Abstract.ToLower().Contains(searchTerm) ||
@@ -48,9 +52,9 @@ namespace CoderThoughtsBlog.Services
 
 
 
-            //}
+                }
 
-            return posts.OrderByDescending(p => p.Created);
+            return tags;
 
         }
 

@@ -25,18 +25,18 @@
             @Html.Raw(Model.Post.Content)
         </div>
         @*<div class="col-3 text-center font-weight-bold h6">
-            <div class="card">
-                <img class="card-img-top" src="/images/tags.png" alt="Tags...">
-                <div class="card-body">
-                    <h4 class="card-title">SYSTEM TAGS</h4>
-                    <div class="tagView">
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
-                        }
-                    </div>
-                </div>
-            </div>
+        <div class="card">
+        <img class="card-img-top" src="/images/tags.png" alt="Tags...">
+        <div class="card-body">
+        <h4 class="card-title">SYSTEM TAGS</h4>
+        <div class="tagView">
+        @foreach (var tag in Model.Tags)
+        {
+        <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
+        }
+        </div>
+        </div>
+        </div>
         </div>*@
     </div>
 
@@ -49,6 +49,7 @@
         @foreach (var tag in Model.Post.Tags.ToList())
         {
             <span class="mb-1 btn btn-dark btn-sm">#@tag.Text</span>
+            @*            <a class="btn btn-dark btn-sm me-2 ms-2 mt-2 mb-2" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text">#@tag.Text</a>*@
         }
     </div>
     <hr />
@@ -87,50 +88,14 @@
     }
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
-@*        <div class="modal" id="@($"#editModal{counter}")">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Editing Comment...</h4>
-
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form asp-action="Edit" asp-controller="Comments">
-                            @Html.Hidden("Id", comment.Id)
-
-                            <div class="form-group">
-                                <textarea name="Body" class="form-control" required>@comment.Body</textarea>
-                            </div>
-
-                            <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
-                        </form>
-                    </div>
-
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">CLOSE</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>*@
-
-
-
-
-
-        <div class="media p-3 mb-2 bg-cf media-border">
+        <div class="media mb-5 py-5 bg-cf media-border">
             <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@comment.BlogUser.FullName" class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;">
 
             <div class="media-body">
                 <h4>@comment.BlogUser.FullName</h4>
 
 
-                @****************************************************************
-            SECTION 1: POST ON OR UPDATED ON
-            *****************************************************************@
+                @*SECTION 1: POST ON OR UPDATED ON*@
                 @if (comment.Deleted is not null)
                 {
                     <span class="small">
@@ -159,12 +124,7 @@
                     </span>
                 }
 
-                @*****************************************************************
-            SECTION 2: HOW DO WE COMPOSE THE BODY
-            *****************************************************************@
-                @*****************************************************************
-            SECTION 2A: Render pre text
-            *****************************************************************@
+                @*SECTION 2A: Render pre text*@
                 <br />
                 @if (comment.Deleted is not null)
                 {
@@ -177,9 +137,7 @@
 
                 <hr />
 
-                @*****************************************************************
-            SECTION 2B: Render main body
-            *****************************************************************@
+                @*SECTION 2B: Render main body*@
                 @if (string.IsNullOrEmpty(comment.Body))
                 {
                     <span class="small font-italic">Comment not available...</span>
@@ -194,28 +152,25 @@
                 }
 
 
-                @****************************************************************
-            SECTION 3: CAN WE RENDER THE EDIT BUTTON
-            *****************************************************************@
+                @*SECTION 3: CAN WE RENDER THE EDIT BUTTON*@
                 @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
                 {
                     <hr>
-                    <button data-bs-toggle="modal" data-bs-target="@($"#editModal{counter}")" class="btn btn-dark float-end font-weight-bold btn-sm">EDIT</button>
+
+                    <button type="button" id="@($"openEditModal{counter}")" class="btn btn-dark float-end font-weight-bold btn-sm me-2">EDIT</button>
                 }
 
-                @****************************************************************
-            SECTION 4: CAN WE RENDER THE MODERATE AND DELETE BUTTONS
-            *****************************************************************@
+                @*SECTION 4: CAN WE RENDER THE MODERATE AND DELETE BUTTONS*@
                 @if (User.IsInRole(BlogRole.Moderator.ToString()) && comment.Deleted is null)
                 {
                     <hr>
                     <div class="row">
                         <div class="col-2">
-                            <button class="btn-sm btn-dark font-weight-bold"  data-bs-target="@($"#moderateModal{counter}")">MODERATE</button>
+                            <button class="btn-sm btn-dark font-weight-bold" data-bs-target="@($"moderateModal{counter}")">MODERATE</button>
                         </div>
                         <div class="col-2">
                             <form asp-action="Delete" asp-controller="Comments">
-                                @Html.Hidden("CommentId", comment.Id)
+                                @Html.Hidden("id", comment.Id)
                                 @Html.Hidden("Slug", comment.Post.Slug)
                                 <button class="btn-sm btn-dark font-weight-bold btn-block">DELETE</button>
                             </form>
@@ -229,7 +184,7 @@
 
 
         @*Modals*@
-        <div class="modal" id="@($"#editModal{counter}")">
+        <dialog class="modal" id="@($"editModal{counter}")">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -252,12 +207,12 @@
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">CLOSE</button>
+                        <button type="button" class="btn-sm btn-dark font-weight-bold" id="@($"closeEditModal{counter}")" >CLOSE</button>
                     </div>
 
                 </div>
             </div>
-        </div>
+        </dialog>
 
         <div class="modal" id="@($"moderateModal{counter}")">
             <div class="modal-dialog">
@@ -296,7 +251,7 @@
                                         <button class="btn-sm form-control btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
                                     </div>
                                     <div class="col">
-                                        <button class="btn-sm form-control btn-dark font-weight-bold" type="button" data-dismiss="modal">CLOSE</button>
+                                        <button class="btn-sm form-control btn-dark font-weight-bold" type="button" data-bs-dismiss="modal">CLOSE</button>
                                     </div>
                                 </div>
                             </div>
@@ -306,6 +261,35 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const @($"editModal{counter}") = document.getElementById('@($"editModal{counter}")');
+            const @($"openEditModal{counter}") = document.getElementById('@($"openEditModal{counter}")');
+            const @($"closeEditModal{counter}") = document.getElementById('@($"closeEditModal{counter}")');
+
+            @($"openEditModal{counter}").addEventListener('click', () => {
+            @($"editModal{counter}").showModal();
+            });
+
+            @($"closeEditModal{counter}").addEventListener('click', () => {
+            @($"editModal{counter}").close();
+            });
+        </script>
+
+@*        <script>
+            const @($"moderateModal{counter}") = document.getElementById('@($"moderateModal{counter}")');
+            const @($"openModerateModal{counter}") = document.getElementById('@($"openModerateModal{counter}")');
+            const @($"closeModerateModal{counter}") = document.getElementById('@($"closeModerateModal{counter}")');
+
+            @($"openModerateModal{counter}").addEventListener('click', () => {
+            @($"moderateModal{counter}").showModal();
+            });
+
+            @($"closeModerateModal{counter}").addEventListener('click', () => {
+            @($"moderateModal{counter}").close();
+            });
+        </script>*@
+
         counter++;
     }
 </div>
@@ -541,7 +525,7 @@
 <div>
     <a asp-action="Edit" asp-route-slug="@Model.Slug">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 @section Scripts {
     <script>
         $('#summernote').summernote({
@@ -559,4 +543,4 @@
             ]
         });
     </script>
-}*@
+}

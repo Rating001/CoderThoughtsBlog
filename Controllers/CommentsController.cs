@@ -129,10 +129,10 @@ namespace CoderThoughtsBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Body")] Comment comment)
         {
-            if (id != comment.Id)
-            {
-                return NotFound();
-            }
+            //if (id != comment.Id)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {

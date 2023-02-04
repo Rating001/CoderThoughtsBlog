@@ -27,17 +27,15 @@ namespace CoderThoughtsBlog.Controllers
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
         private readonly BlogSearchService _blogSearchService;
-        private readonly TagSearchService _tagSearchService;
 
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService, TagSearchService tagSearchService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager, BlogSearchService blogSearchService)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
             _userManager = userManager;
             _blogSearchService = blogSearchService;
-            _tagSearchService = tagSearchService;
         }
 
         // GET: Posts
@@ -84,19 +82,20 @@ namespace CoderThoughtsBlog.Controllers
 
         }
 
-        public async Task<IActionResult> TagIndex(int? page, string? tag)
-        {
-            if (tag is null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> TagIndex(int? page, string? tag)
+        //{
+        //    if (tag is null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var pageNumber = page ?? 1;
-            var pageSize = 6;
+        //    var pageNumber = page ?? 1;
+        //    var pageSize = 6;
 
-            var posts = _tagSearchService.Search(tag);
+            //var tags = _tagSearchService.Search(tag);
+            //var posts = _blogSearchService.TagSearch();
 
-            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+            //return View(await posts.ToPagedListAsync(pageNumber, pageSize));
 
 
             //var posts = _context.Posts.Where(p => p.BlogId == id);
@@ -115,7 +114,7 @@ namespace CoderThoughtsBlog.Controllers
             //.ToPagedListAsync(pageNumber, pageSize);
 
             //return View(posts);
-        }
+        //}
 
 
         // GET: Posts/Details/5
@@ -138,7 +137,7 @@ namespace CoderThoughtsBlog.Controllers
                 .ThenInclude(c => c.Moderator)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
-
+            var comment = await _context.Comments.Distinct().ToListAsync();
 
             if (post == null)
             {
@@ -151,7 +150,10 @@ namespace CoderThoughtsBlog.Controllers
                 Tags = _context.Tags
                                .Select(t => t.Text.ToLower())
                                .Distinct()
-                               .ToList()
+                               .ToList(),
+                Comment = comment
+
+
             };
 
             ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageData, post.ContentType);
