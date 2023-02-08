@@ -22,14 +22,14 @@ h6 {
     --foreground-: var(--dark-color-);
     --background-: var(--light-color-);
     --special-color-: rgb(212, 255, 219);
-    transition: all 0.5s;
+
 }
 
 .dark-mode {
     --foreground-: var(--light-color-);
     --background-: var(--dark-color-);
     --special-color-: darkgreen;
-    transition: all 0.5s;
+
 }
 
 .dark-mode-toggle {
@@ -42,7 +42,7 @@ h6 {
     fill: var(--foreground-);
     stroke: var(--foreground-);
     stroke-width: 1;
-    transition: stroke-width, .5s;
+    transition: stroke-width, .3s;
 }
 
     .dark-toggle:hover {
@@ -65,7 +65,7 @@ h6 {
     background-repeat: no-repeat;
     background-color: #fff;
     width: auto;
-    transition: all 0.5s;
+
 }
 
 .dark-mode .image-header {
@@ -74,7 +74,7 @@ h6 {
     background-repeat: no-repeat;
     background-color: #fff;
     width: auto;
-    transition: all 0.5s;
+
 }
 
 
